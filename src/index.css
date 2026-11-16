@@ -1,0 +1,738 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* LIGHT THEME (default :root) */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Indigo brand — matches the landing accent (#6366f1). Light uses indigo-600
+       so white button text stays ≥AA; dark uses indigo-500. */
+    --primary: 243 75% 59%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 243 75% 59%;
+
+    /* shared (not theme-dependent) */
+    --radius: 0.5rem;
+  }
+
+  /* DARK THEME (applied when <html class="dark">) — near-black canvas like the landing (#08080b) */
+  .dark {
+    --background: 240 14% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 12% 5%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 12% 5%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 239 84% 67%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 217 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 32.6% 17.5%;
+    --input: 217 32.6% 17.5%;
+    --ring: 239 84% 67%;
+  }
+}
+
+@layer base {
+  :root {
+    --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system,
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
+      "DejaVu Sans Mono", monospace;
+  }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  /* Numbers line up in KPIs/tables wherever tabular-nums is applied; Inter
+     supports it natively (previously a no-op on some system fonts). */
+  code, kbd, pre, samp {
+    font-family: var(--font-mono);
+  }
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(147, 51, 234, 0.12) 100%);
+}
+.dark .gradient-bg {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+}
+
+/* Glass card — light by default, overridden in dark mode */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+}
+.dark .glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.agent-card {
+  transition: all 0.3s ease;
+}
+
+.agent-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+.dark .agent-card:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.typing-animation::after {
+  content: '|';
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 51, 234, 0.08) 100%);
+  transition: all 0.3s ease;
+}
+.dark .stat-card {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+.dark .stat-card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Kept for compatibility but now a SOLID single-color brand fill (no multi-color
+   gradient) — every primary CTA reads as one flat color. */
+.animated-gradient {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+.animated-gradient:hover { background: hsl(var(--primary) / 0.9); }
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   APP DESIGN SYSTEM — authenticated portals (Business + Platform)
+   Additive, premium glass layer that ELEVATES the existing look
+   (blue→purple family) without replacing it. Nothing here changes a
+   component until it opts in via these classes. Light + dark tuned
+   separately. All motion on transform/opacity, killed under
+   prefers-reduced-motion at the end of this block.
+   ════════════════════════════════════════════════════════════ */
+
+/* Named accent hues → drive icon tiles, rings, spotlights, bars.
+   A component picks one with .acc-<hue>; everything reads var(--acc). */
+/* Each hue ships two tones:
+   --acc-<h>      vivid 500 → fills, borders, glows, and text/glyphs in DARK mode
+   --acc-<h>-ink  darker 700 → text/glyphs in LIGHT mode so contrast stays ≥ AA
+   (per ui-ux-pro-max §6 contrast-readability; e.g. emerald/amber 500 fail on white). */
+:root {
+  --acc-indigo:  99 102 241;  --acc-indigo-ink:  67  56 202;
+  --acc-violet: 139  92 246;  --acc-violet-ink: 109  40 217;
+  --acc-blue:    59 130 246;  --acc-blue-ink:    29  78 216;
+  --acc-cyan:     6 182 212;  --acc-cyan-ink:    14 116 144;
+  --acc-emerald: 16 185 129;  --acc-emerald-ink:  4 120  87;
+  --acc-amber:  245 158  11;  --acc-amber-ink:  180  83   9;
+  --acc-rose:   244  63  94;  --acc-rose-ink:   190  18  60;
+  --acc-sky:     14 165 233;  --acc-sky-ink:      3 105 161;
+  --acc-teal:    20 184 166;  --acc-teal-ink:    15 118 110;
+  --acc-slate:  100 116 139;  --acc-slate-ink:   71  85 105;
+  --acc: var(--acc-indigo);   --acc-ink: var(--acc-indigo-ink);
+}
+.acc-indigo  { --acc: var(--acc-indigo);  --acc-ink: var(--acc-indigo-ink); }
+.acc-violet  { --acc: var(--acc-violet);  --acc-ink: var(--acc-violet-ink); }
+.acc-blue    { --acc: var(--acc-blue);    --acc-ink: var(--acc-blue-ink); }
+.acc-cyan    { --acc: var(--acc-cyan);    --acc-ink: var(--acc-cyan-ink); }
+.acc-emerald { --acc: var(--acc-emerald); --acc-ink: var(--acc-emerald-ink); }
+.acc-amber   { --acc: var(--acc-amber);   --acc-ink: var(--acc-amber-ink); }
+.acc-rose    { --acc: var(--acc-rose);    --acc-ink: var(--acc-rose-ink); }
+.acc-sky     { --acc: var(--acc-sky);     --acc-ink: var(--acc-sky-ink); }
+.acc-teal    { --acc: var(--acc-teal);    --acc-ink: var(--acc-teal-ink); }
+.acc-slate   { --acc: var(--acc-slate);   --acc-ink: var(--acc-slate-ink); }
+
+/* ROSE = LIGHT-MODE-ONLY accent, system-wide. In dark mode every .acc-rose element
+   (Health section, platform signature, rose KPI tiles) resolves to indigo instead. */
+.dark .acc-rose { --acc: var(--acc-indigo); --acc-ink: var(--acc-indigo-ink); }
+
+/* Accent-colored text that stays legible in light mode (ink), bright in dark. */
+.acc-text { color: rgb(var(--acc-ink)); }
+.dark .acc-text { color: rgb(var(--acc)); }
+
+/* Colored icon tile — soft accent fill + accent glyph (ink glyph in light mode). */
+.acc-tile {
+  color: rgb(var(--acc-ink));
+  background: rgb(var(--acc) / 0.12);
+  border: 1px solid rgb(var(--acc) / 0.20);
+}
+.dark .acc-tile { color: rgb(var(--acc)); background: rgb(var(--acc) / 0.16); border-color: rgb(var(--acc) / 0.24); }
+
+/* Softer accent surface — for inline metric chips inside cards. The container
+   carries the accent ink color; override child text where you want foreground. */
+.acc-soft { color: rgb(var(--acc-ink)); background: rgb(var(--acc) / 0.08); border: 1px solid rgb(var(--acc) / 0.18); }
+.dark .acc-soft { color: rgb(var(--acc)); background: rgb(var(--acc) / 0.12); }
+
+/* Heavier frosted panel — for hero/section surfaces above .glass-card. */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(17, 24, 39, 0.07);
+  box-shadow: 0 12px 40px -14px rgba(17, 24, 39, 0.18);
+}
+.dark .glass-panel {
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 44px -14px rgba(0, 0, 0, 0.55);
+}
+
+/* Cursor-follow spotlight — the signature premium hover for KPI/feature
+   cards. JS sets --mx/--my; a soft accent glow + lift appear. Tamed from
+   the landing .lp-card so it sits well on light surfaces too. */
+.app-spotlight {
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.app-spotlight::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%),
+              rgb(var(--acc) / 0.14), transparent 46%);
+  opacity: 0; transition: opacity 0.45s ease;
+}
+.app-spotlight:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -18px rgb(var(--acc) / 0.45); }
+.app-spotlight:hover::before { opacity: 1; }
+.dark .app-spotlight::before { background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--acc) / 0.2), transparent 46%); }
+
+/* Thin accent rule that reads the card's hue (top or left). */
+.acc-bar-top { position: relative; }
+.acc-bar-top::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, rgb(var(--acc)), rgb(var(--acc) / 0.35));
+  opacity: 0.9;
+}
+
+/* Family gradient text (blue→purple) — reuses the exact header logo stops. */
+.text-gradient {
+  background-image: linear-gradient(to right, #3b82f6, #9333ea);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+/* Platform console variant: indigo→violet with a rose signature tail. */
+.text-gradient-platform {
+  background-image: linear-gradient(110deg, #6366f1 0%, #8b5cf6 55%, #f43f5e 115%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* Ambient portal backdrop — a very faint breathing aurora + fine grid that
+   lives behind page content (portal wraps it, main gets relative z-10). */
+.app-ambient { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.app-ambient::before {
+  content: ""; position: absolute; inset: -25%;
+  background:
+    radial-gradient(32% 28% at 18% 12%, rgba(59, 130, 246, 0.10), transparent 60%),
+    radial-gradient(30% 26% at 82% 20%, rgba(147, 51, 234, 0.09), transparent 60%),
+    radial-gradient(36% 30% at 60% 92%, rgba(56, 189, 248, 0.07), transparent 60%);
+  filter: blur(36px);
+  animation: app-aurora 26s ease-in-out infinite alternate;
+}
+.app-ambient::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(100, 116, 139, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(100, 116, 139, 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 90%);
+          mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 90%);
+}
+.dark .app-ambient::before {
+  background:
+    radial-gradient(32% 28% at 18% 12%, rgba(59, 130, 246, 0.16), transparent 60%),
+    radial-gradient(30% 26% at 82% 20%, rgba(147, 51, 234, 0.15), transparent 60%),
+    radial-gradient(36% 30% at 60% 92%, rgba(56, 189, 248, 0.10), transparent 60%);
+}
+.dark .app-ambient::after {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+}
+/* Platform console — rose glow in LIGHT mode (the signature), indigo in dark. */
+.app-ambient.is-platform::before {
+  background:
+    radial-gradient(34% 30% at 20% 14%, rgba(244, 63, 94, 0.12), transparent 60%),
+    radial-gradient(32% 28% at 80% 24%, rgba(244, 63, 94, 0.09), transparent 60%);
+}
+.dark .app-ambient.is-platform::before {
+  background:
+    radial-gradient(34% 30% at 20% 14%, rgba(99, 102, 241, 0.20), transparent 60%),
+    radial-gradient(32% 28% at 80% 24%, rgba(99, 102, 241, 0.16), transparent 60%);
+}
+@keyframes app-aurora {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(0, -4%, 0) scale(1.06); }
+}
+
+/* Gentle float + soft glow pulse for accent glyphs / live-status dots. */
+@keyframes app-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.app-float { animation: app-float 6s ease-in-out infinite; }
+
+.app-live-dot { position: relative; }
+.app-live-dot::after {
+  content: ""; position: absolute; inset: -4px; border-radius: 9999px;
+  border: 1px solid rgb(var(--acc) / 0.6);
+  animation: app-ping 1.8s ease-out infinite;
+}
+@keyframes app-ping { 0% { transform: scale(0.85); opacity: 0.7; } 100% { transform: scale(1.7); opacity: 0; } }
+
+/* Sheen sweep for premium buttons / logo lockups on hover. */
+.app-sheen { position: relative; overflow: hidden; }
+.app-sheen::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+  transform: translateX(-130%); transition: transform 0.7s ease;
+}
+.app-sheen:hover::after { transform: translateX(130%); }
+
+@media (prefers-reduced-motion: reduce) {
+  .app-ambient::before, .app-float, .app-live-dot::after { animation: none !important; }
+  .app-spotlight, .app-sheen::after { transition: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   LANDING PAGE — refined dark aesthetic (Linear/Vercel/Resend style)
+   Committed near-black canvas · one indigo accent · craft over color.
+   All effects on transform/opacity for 60fps.
+   ════════════════════════════════════════════════════════════ */
+
+.lp {
+  --lp-bg: #08080b;
+  --lp-accent: 99 102 241;     /* indigo-500 */
+  background-color: var(--lp-bg);
+  color: #fafafa;
+}
+.lp ::selection { background: rgb(var(--lp-accent) / 0.3); color: #fff; }
+
+/* Scroll-snap slideshow: the document snaps one full-screen slide at a time.
+   Scoped to <html> only while the landing page is mounted. */
+html.lp-snap { scroll-snap-type: y proximity; }
+
+/* ── Journey: persistent forward-moving background ─────────────── */
+/* Two starfields drifting upward via GPU transform (no repaint) = travel. */
+.lp-stars, .lp-stars2 { position: absolute; left: 0; right: 0; top: -60%; height: 220%; background-repeat: repeat; will-change: transform; }
+.lp-stars {
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 85% 22%, rgba(199,210,254,0.6), transparent),
+    radial-gradient(1px 1px at 10% 70%, rgba(255,255,255,0.45), transparent);
+  background-size: 420px 420px;
+  opacity: 0.55;
+  animation: lp-stars-move 55s linear infinite;
+}
+.lp-stars2 {
+  background-image:
+    radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(2px 2px at 80% 40%, rgba(165,180,252,0.45), transparent),
+    radial-gradient(1.5px 1.5px at 35% 15%, rgba(255,255,255,0.3), transparent);
+  background-size: 680px 680px;
+  opacity: 0.4;
+  animation: lp-stars-move2 95s linear infinite;
+}
+@keyframes lp-stars-move  { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -420px, 0); } }
+@keyframes lp-stars-move2 { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -680px, 0); } }
+
+/* Occasional diagonal meteors through the starfield — restrained, not a shower.
+   GPU-only (transform/opacity), staggered via inline custom properties per instance. */
+.lp-meteor {
+  position: absolute;
+  top: var(--lp-meteor-y, 0%);
+  left: var(--lp-meteor-x, 50%);
+  width: 2px;
+  height: 2px;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: lp-meteor-fall var(--lp-meteor-duration, 6s) linear infinite;
+  animation-delay: var(--lp-meteor-delay, 0s);
+}
+.lp-meteor::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 110px;
+  height: 1px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, rgba(199,210,254,0.85), transparent);
+}
+@keyframes lp-meteor-fall {
+  0%   { transform: rotate(215deg) translateX(0); opacity: 0; }
+  6%   { opacity: 1; }
+  20%  { opacity: 1; }
+  28%  { transform: rotate(215deg) translateX(-480px); opacity: 0; }
+  100% { transform: rotate(215deg) translateX(-480px); opacity: 0; }
+}
+
+/* Slow breathing aurora behind the stars */
+.lp-bg-aurora {
+  position: absolute; inset: -20%;
+  background:
+    radial-gradient(38% 30% at 22% 18%, rgba(99,102,241,0.20), transparent 60%),
+    radial-gradient(34% 28% at 80% 32%, rgba(139,92,246,0.17), transparent 60%),
+    radial-gradient(40% 32% at 50% 85%, rgba(56,189,248,0.10), transparent 60%);
+  filter: blur(30px);
+  animation: lp-aurora-drift 26s ease-in-out infinite alternate;
+}
+@keyframes lp-aurora-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(0, -5%, 0) scale(1.08); }
+}
+/* Depth vignette so content stays readable */
+.lp-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(125% 80% at 50% 0%, transparent 45%, rgba(8,8,11,0.55) 100%);
+}
+
+/* ── Journey spine: waypoint node + drawing line ──────────────── */
+.lp-node {
+  display: flex; align-items: center; justify-content: center;
+  height: 2.75rem; width: 2.75rem; border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: #0c0c11; color: rgb(var(--lp-accent));
+  transition: box-shadow 0.5s ease, border-color 0.5s ease, color 0.5s ease, transform 0.5s ease;
+  position: relative; z-index: 1;
+}
+.lp-node.is-active {
+  border-color: rgba(99,102,241,0.7);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.12), 0 0 28px 2px rgba(99,102,241,0.5);
+}
+.lp-node.is-active::after {
+  content: ""; position: absolute; inset: -6px; border-radius: inherit;
+  border: 1px solid rgba(99,102,241,0.4); animation: lp-ping 1.8s ease-out infinite;
+}
+@keyframes lp-ping { 0% { transform: scale(0.9); opacity: 0.7; } 100% { transform: scale(1.6); opacity: 0; } }
+
+/* Fine grid, faded toward edges */
+.lp-grid {
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 40%, transparent 100%);
+          mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 40%, transparent 100%);
+}
+
+/* Single soft radial glow behind the hero — restrained, not rainbow */
+.lp-glow {
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(99,102,241,0.28) 0%, transparent 70%),
+    radial-gradient(40% 40% at 80% 10%, rgba(139,92,246,0.16) 0%, transparent 70%);
+}
+
+/* Headline gradient: white → muted (not multicolor) */
+.lp-title {
+  background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 55%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+}
+
+/* Subtle accent text */
+.lp-accent { color: rgb(var(--lp-accent)); }
+
+/* Cursor-follow spotlight on cards — the signature premium hover.
+   JS sets --mx/--my; a soft highlight + a brightened border ring appear. */
+.lp-card {
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.022);
+  border-radius: 1rem;
+  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), border-color 0.4s ease, background-color 0.4s ease;
+}
+.lp-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.14); }
+.lp-card::before {  /* glow fill */
+  content: "";
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(99,102,241,0.12), transparent 42%);
+  opacity: 0; transition: opacity 0.45s ease;
+}
+.lp-card::after {   /* border highlight that tracks the cursor */
+  content: "";
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  padding: 1px;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%), rgba(255,255,255,0.5), transparent 40%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0; transition: opacity 0.45s ease;
+}
+.lp-group:hover .lp-card::before,
+.lp-card:hover::before,
+.lp-card:hover::after { opacity: 1; }
+
+/* Marquee — seamless right-to-left loop. Track holds two identical copies and
+   slides to -50%, so copy B lands exactly where copy A started (no jump). */
+@keyframes lp-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.lp-marquee {
+  display: flex; width: max-content;
+  animation: lp-marquee 38s linear infinite;
+  will-change: transform; backface-visibility: hidden;
+}
+/* Pause on hover/focus so visitors can inspect a logo (a11y + readability). */
+.lp-marquee-mask:hover .lp-marquee,
+.lp-marquee-mask:focus-within .lp-marquee { animation-play-state: paused; }
+.lp-marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* Premium film grain over the backdrop (sits behind content, never interactive). */
+.lp-grain {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  opacity: 0.05; mix-blend-mode: overlay;
+}
+
+/* Conic shine that orbits the product mockup frame */
+@property --lp-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+.lp-frame { position: relative; border-radius: 1rem; }
+.lp-frame::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+  background: conic-gradient(from var(--lp-angle), transparent 55%, rgba(99,102,241,0.9), rgba(139,92,246,0.9), transparent 85%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: lp-spin 8s linear infinite;
+}
+@keyframes lp-spin { to { --lp-angle: 360deg; } }
+
+/* Shimmer sweep on primary CTAs */
+.lp-shimmer { position: relative; overflow: hidden; }
+.lp-shimmer::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.25) 50%, transparent 65%);
+  transform: translateX(-130%);
+  animation: lp-sweep 4s ease-in-out infinite;
+}
+@keyframes lp-sweep { 0% { transform: translateX(-130%); } 55%,100% { transform: translateX(130%); } }
+
+/* Gentle float */
+@keyframes lp-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.lp-float { animation: lp-float 6s ease-in-out infinite; }
+
+/* ── Frosted glass panel (used for the Roles cards over the starfield) ── */
+.lp-glass {
+  background: rgba(255, 255, 255, 0.045) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.lp-glass:hover { background: rgba(255, 255, 255, 0.07) !important; }
+
+/* ── Flowing-gradient headline accent (pair with bg-clip-text text-transparent) ── */
+.lp-accent-flow {
+  background-image: linear-gradient(100deg, #818cf8, #a78bfa, #c4b5fd, #818cf8);
+  background-size: 220% 100%;
+  animation: lp-flow 6s ease-in-out infinite;
+}
+@keyframes lp-flow { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+/* ── Traveling pulse that descends the journey spine ── */
+.lp-spine-pulse {
+  position: absolute; left: 50%; top: 0; height: 64px; width: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, transparent, rgba(165,180,252,0.95), transparent);
+  filter: blur(0.4px); border-radius: 9999px;
+  animation: lp-spine-travel 3.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+@keyframes lp-spine-travel {
+  0%   { top: -64px;  opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { top: 100%;   opacity: 0; }
+}
+
+/* ── Border beam: rotating conic edge light as a child element (no pseudo conflict) ── */
+.lp-beam { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.lp-beam::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+  background: conic-gradient(from var(--lp-angle), transparent 58%, #818cf8, #c4b5fd, transparent 92%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: lp-spin 5s linear infinite;
+}
+
+/* ════════════════════════════════════════════════════════════
+   LANDING PAGE — LIGHT MODE (purely additive, gated behind .lp-light)
+   Dark mode is the default and is left completely untouched: when
+   `.lp-light` is absent, none of these rules apply. Every effect/
+   animation is recolored here, never disabled.
+   `text-white` is darkened EXCEPT on gradient icon tiles
+   ([class*="bg-gradient"]) so white glyphs on colored fills stay white.
+   ════════════════════════════════════════════════════════════ */
+.lp-light { --lp-bg: #f6f7fb; color: #1e1e24; }
+.lp-light ::selection { background: rgb(var(--lp-accent) / 0.18); color: #111; }
+
+/* ── background scene ── */
+.lp-light .lp-vignette { background: radial-gradient(125% 80% at 50% 0%, transparent 50%, rgba(246,247,251,0.85) 100%); }
+.lp-light .lp-bg-aurora {
+  background:
+    radial-gradient(38% 30% at 22% 18%, rgba(99,102,241,0.14), transparent 60%),
+    radial-gradient(34% 28% at 80% 32%, rgba(139,92,246,0.12), transparent 60%),
+    /* rose is a LIGHT-MODE-ONLY warm accent — a soft rose bloom, only here in .lp-light */
+    radial-gradient(30% 26% at 74% 80%, rgba(244,63,94,0.10), transparent 60%),
+    radial-gradient(40% 32% at 40% 88%, rgba(56,189,248,0.09), transparent 60%);
+}
+/* faint slate/indigo dots so the upward drift still reads on a light canvas */
+.lp-light .lp-stars {
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(79,70,229,0.30), transparent),
+    radial-gradient(1px 1px at 70% 60%, rgba(30,41,59,0.22), transparent),
+    radial-gradient(1px 1px at 40% 80%, rgba(30,41,59,0.20), transparent),
+    radial-gradient(1.5px 1.5px at 85% 22%, rgba(99,102,241,0.28), transparent),
+    radial-gradient(1px 1px at 10% 70%, rgba(30,41,59,0.18), transparent);
+  opacity: 0.5;
+}
+.lp-light .lp-stars2 {
+  background-image:
+    radial-gradient(1px 1px at 50% 50%, rgba(30,41,59,0.18), transparent),
+    radial-gradient(1px 1px at 15% 85%, rgba(30,41,59,0.15), transparent),
+    radial-gradient(2px 2px at 80% 40%, rgba(99,102,241,0.22), transparent),
+    radial-gradient(1.5px 1.5px at 35% 15%, rgba(30,41,59,0.15), transparent);
+  opacity: 0.4;
+}
+.lp-light .lp-meteor { background: rgb(79,70,229); box-shadow: 0 0 0 1px rgba(79,70,229,0.15); }
+.lp-light .lp-meteor::before { background: linear-gradient(90deg, rgba(79,70,229,0.55), transparent); }
+.lp-light .lp-grain { opacity: 0.03; mix-blend-mode: multiply; }
+
+/* ── headline + accent gradients (white→zinc would vanish on light) ── */
+.lp-light .lp-title { background-image: linear-gradient(180deg, #18181b 0%, #27272a 55%, #52525b 100%); }
+.lp-light .lp-accent-flow { background-image: linear-gradient(100deg, #4f46e5, #7c3aed, #6366f1, #4f46e5); }
+
+/* ── cards / glass panels ── */
+.lp-light .lp-card { border-color: rgba(17,24,39,0.09); background: rgba(17,24,39,0.022); }
+.lp-light .lp-card:hover { border-color: rgba(17,24,39,0.16); }
+.lp-light .lp-card::after { /* cursor-follow border ring → dark on light */
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%), rgba(17,24,39,0.18), transparent 40%);
+}
+.lp-light .lp-glass { background: rgba(17,24,39,0.03) !important; }
+.lp-light .lp-glass:hover { background: rgba(17,24,39,0.05) !important; }
+
+/* ── text utilities ── */
+.lp-light .text-white:not([class*="bg-gradient"]) { color: #18181b; }
+.lp-light .text-zinc-200 { color: #27272a; }
+.lp-light .text-zinc-300 { color: #3f3f46; }
+.lp-light .text-zinc-400 { color: #52525b; }
+.lp-light .text-zinc-500 { color: #71717a; }
+.lp-light .text-zinc-600 { color: #9ca3af; }
+.lp-light .text-white\/10 { color: rgba(24,24,27,0.10); }
+.lp-light .hover\:text-white:hover { color: #18181b; }
+.lp-light .group:hover .group-hover\:text-white { color: #18181b; }
+
+/* ── gradient-clip text stops ── */
+.lp-light .from-white { --tw-gradient-from: #18181b var(--tw-gradient-from-position); }
+.lp-light .to-zinc-300 { --tw-gradient-to: #52525b var(--tw-gradient-to-position); }
+.lp-light .to-zinc-500 { --tw-gradient-to: #71717a var(--tw-gradient-to-position); }
+
+/* ── translucent white panel fills → subtle slate tints ── */
+.lp-light .bg-white\/5 { background-color: rgba(17,24,39,0.04); }
+.lp-light .bg-white\/10 { background-color: rgba(17,24,39,0.06); }
+.lp-light .bg-white\/\[0\.02\] { background-color: rgba(17,24,39,0.025); }
+.lp-light .bg-white\/\[0\.03\] { background-color: rgba(17,24,39,0.035); }
+.lp-light .hover\:bg-white\/5:hover { background-color: rgba(17,24,39,0.05); }
+.lp-light .hover\:bg-white\/10:hover { background-color: rgba(17,24,39,0.07); }
+
+/* ── borders ── */
+.lp-light .border-white\/5 { border-color: rgba(17,24,39,0.06); }
+.lp-light .border-white\/10 { border-color: rgba(17,24,39,0.09); }
+.lp-light .border-white\/15 { border-color: rgba(17,24,39,0.12); }
+.lp-light .border-white\/20 { border-color: rgba(17,24,39,0.16); }
+.lp-light .border-white\/30 { border-color: rgba(17,24,39,0.24); }
+.lp-light .hover\:border-white\/20:hover { border-color: rgba(17,24,39,0.18); }
+.lp-light .hover\:border-white\/30:hover { border-color: rgba(17,24,39,0.26); }
+
+/* ── primary CTA buttons (solid white → indigo) ── */
+.lp-light .bg-white { background-color: #4f46e5; }
+.lp-light .text-zinc-900 { color: #ffffff; }
+.lp-light .hover\:bg-zinc-200:hover { background-color: #4338ca; }
+
+/* ── arbitrary near-black surfaces ── */
+.lp-light .bg-\[\#08080b\] { background-color: #f6f7fb; }
+.lp-light .bg-\[\#08080b\]\/70 { background-color: rgba(246,247,251,0.72); }
+.lp-light .bg-\[\#08080b\]\/95 { background-color: rgba(246,247,251,0.96); }
+.lp-light .bg-\[\#0c0c11\]\/90 { background-color: rgba(255,255,255,0.92); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-marquee, .lp-frame::before, .lp-shimmer::after, .lp-float,
+  .lp-stars, .lp-stars2, .lp-bg-aurora, .lp-node.is-active::after,
+  .lp-accent-flow, .lp-spine-pulse, .lp-beam::before, .lp-meteor { animation: none !important; }
+}
